@@ -13,17 +13,22 @@ Author URI: http://marketing.uoregon.edu
  *
  * @return   String containing audio player HTML.
  */
-function simplecast_shortcode() {
+function simplecast_shortcode($atts) {
+	var_dump($atts);
+	// Get stream URL from the shortcode.
+	$args = shortcode_atts(array( 'media_url' => 'undefined' ), $atts);
+
 	// The basic HTML5 audio component, hopefully this works.
 	$output = '<audio id="simplecast_player" controls>
-    			<source src="http://d55-84.uoregon.edu:8000/;stream.nsv&type=mp3" type="audio/mp3">
+    			<source src="'. $args['media_url'] .'" type="audio/mp3">
 			  </audio>';
 
 	// Setup flash player in case we need it
 	$output .= '<script type="text/javascript" src="' . plugins_url('vendor/audio-player/audio-player.js', __FILE__) . '"></script>';
 	$output .= '<script type="text/javascript">  
             	AudioPlayer.setup("' . plugins_url('vendor/audio-player/player.swf', __FILE__) . '", {  
-                	width: 290  
+                	width: "100%",
+                	animation: "no",  
             	});
         		</script>';
 
@@ -31,7 +36,7 @@ function simplecast_shortcode() {
 	$output .= '<script type="text/javascript">
 			    var audioTag = document.createElement(\'audio\');
 			    if (!(!!(audioTag.canPlayType) && ("no" != audioTag.canPlayType("audio/mpeg")) && ("" != audioTag.canPlayType("audio/mpeg")))) {
-			        AudioPlayer.embed("simplecast_player", {soundFile: "http://d55-84.uoregon.edu:8000/;stream.nsv&type=mp3"});
+			        AudioPlayer.embed("simplecast_player", {soundFile: "'. $args['media_url'] .'"});
 			    }
 				</script>';
 
