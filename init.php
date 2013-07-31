@@ -14,7 +14,6 @@ Author URI: http://marketing.uoregon.edu
  * @return   String containing audio player HTML.
  */
 function simplecast_shortcode($atts) {
-	var_dump($atts);
 	// Get stream URL from the shortcode.
 	$args = shortcode_atts(array( 'media_url' => 'undefined' ), $atts);
 
