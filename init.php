@@ -17,30 +17,28 @@ function simplecast_shortcode($atts) {
 	// Get stream URL from the shortcode.
 	$args = shortcode_atts(array( 'media_url' => 'undefined' ), $atts);
 
-	// The basic HTML5 audio component, hopefully this works.
-	$output = '<audio id="simplecast_player" controls>
-    			<source src="'. $args['media_url'] .'" type="audio/mp3">
-			  </audio>';
-
-	// Setup flash player in case we need it
+	$output = '<div id="simplecast_player">';
 	$output .= '<script type="text/javascript" src="' . plugins_url('vendor/audio-player/audio-player.js', __FILE__) . '"></script>';
-	$output .= '<script type="text/javascript">  
-            	AudioPlayer.setup("' . plugins_url('vendor/audio-player/player.swf', __FILE__) . '", {  
-                	width: "100%",
-                	animation: "no",  
-            	});
-        		</script>';
 
-    // Check to see if HTML5 player will work, or failover to flash player.    		
+	// simplecast.js needs to know the path to the player swf and the media file URL.
+	
 	$output .= '<script type="text/javascript">
-			    var audioTag = document.createElement(\'audio\');
-			    if (!(!!(audioTag.canPlayType) && ("no" != audioTag.canPlayType("audio/mpeg")) && ("" != audioTag.canPlayType("audio/mpeg")))) {
-			        AudioPlayer.embed("simplecast_player", {soundFile: "'. $args['media_url'] .'"});
-			    }
+					var simplecastMediaURL = "' . $args['media_url'] .'";
+					var simplecastPlayerSWF = "' . plugins_url('vendor/audio-player/player.swf', __FILE__) . '";
 				</script>';
+
+	$output .= '<script type="text/javascript" src="'. plugins_url('simplecast.js', __FILE__) . '"></script>';
+
+	$output .= '</div>';
 
 	return $output;
 }
+
+function simplecast_scripts() {
+	wp_enqueue_script( 'modernizr-custom', plugins_url('/vendor/modernizr.custom.22223.js', __FILE__) );
+}
+
+add_action( 'wp_enqueue_scripts', 'simplecast_scripts' );
 
 add_shortcode( 'simplecast', 'simplecast_shortcode' );
 ?>
