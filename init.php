@@ -17,18 +17,22 @@ function simplecast_shortcode($atts) {
 	// Get stream URL from the shortcode.
 	$args = shortcode_atts(array( 'media_url' => 'undefined' ), $atts);
 
-	$output = '<div id="simplecast_player">';
+  // give player id a random number to help avoid collisions between multiple instances
+  $player_id = rand();
+
+	$output = '<div id="simplecast_player_' . $player_id . '">';
 	$output .= '<script type="text/javascript" src="' . plugins_url('vendor/audio-player/audio-player.js', __FILE__) . '"></script>';
 
 	// simplecast.js needs to know the path to the player swf and the media file URL.
-	
+
 	$output .= '<script type="text/javascript">
 					var simplecastMediaURL = "' . $args['media_url'] .'";
 					var simplecastPlayerSWF = "' . plugins_url('vendor/audio-player/player.swf', __FILE__) . '";
+          var player_id = "' . $player_id . '";
 				</script>';
 
-	$output .= '<script type="text/javascript" src="'. plugins_url('simplecast.js', __FILE__) . '"></script>';
-
+  // pass player id to js helper.
+  $output .= '<script type="text/javascript" src="'. plugins_url('simplecast.js', __FILE__) . '"></script>';
 	$output .= '</div>';
 
 	return $output;

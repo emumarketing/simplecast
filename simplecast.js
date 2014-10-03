@@ -3,10 +3,10 @@ if(Modernizr.audio.mp3 == "probably") {
    						+ '<source src="' + simplecastMediaURL + '" type="audio/mp3">'
 					+ '</audio>');
 } else {
-   	AudioPlayer.setup(simplecastPlayerSWF, {  
+   	AudioPlayer.setup(simplecastPlayerSWF, {
 			          	width: "100%",
-           				animation: "no",  
+           				animation: "no",
             		});
 
-	AudioPlayer.embed("simplecast_player", {soundFile: simplecastMediaURL});
+	AudioPlayer.embed("simplecast_player_"+player_id, {soundFile: simplecastMediaURL});
 }
